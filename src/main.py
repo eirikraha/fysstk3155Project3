@@ -2,6 +2,7 @@ import sys
 import numpy as np
 import pandas as pd
 import copy as cp
+import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
@@ -22,6 +23,37 @@ def XLSread(filename):
 		data_dict[temp_arr[0]] = list(temp_arr[1:])
 
 	return data_dict
+
+def gain(X, Y, Y_prob, Y_class):
+	sorted_index = np.argsort(Y)
+	sorted_prob_index = np.argsort(Y_prob[1, :])
+
+	total_ones = 0
+	for i in Y:
+		if i == 1:
+			total_ones += 1
+
+	x = np.linspace(0, len(Y), len(Y))
+	y_known = np.zeros(len(Y))
+	y_unknown = np.zeros(len(Y))
+
+
+	print (Y_class)
+	print (Y_class[sorted_prob_index])
+	print (min(Y_class), min(Y))
+
+	foo
+	
+	for i in range(0, len(Y)):
+		y_unknown[i] = np.sum((Y_class[sorted_prob_index])[0:i])
+		y_known[i] = np.sum((Y[sorted_index])[0:i])
+
+	plt.plot(x, x/float(x[-1]))
+	plt.plot(x, y_known)
+
+	plt.show()
+
+
 
 filename = '../data/default of credit card clients.xls'
 data_dict = XLSread(filename)
@@ -76,11 +108,15 @@ X_test = scaler.transform(X_test)
 if (sys.argv[1] == "b") or (sys.argv[1] == 'All'):
 
 	
+	print ("Here!")
+
+	print (min(Y_train))
 
 	LogReg = LogisticRegression()
 	LogReg.fit(X_train, Y_train)
 	pred = np.array(LogReg.predict(X_test))
-
+	proba = np.array(LogReg.predict_proba(X_test))
+	print ("Here!")
 	#positive = [1 for i in pred if i[1]  > 0.5]
 	#positive2 = [i for i in Y_test if i > 0]
 
@@ -95,6 +131,8 @@ if (sys.argv[1] == "b") or (sys.argv[1] == 'All'):
 			summer += 1
 
 	print (summer/float(len(pred)), ' If there is bad balane, this would be 0')
+
+	gain(X_test, Y_test, proba, pred)
 
 if (sys.argv[1] == "c") or (sys.argv[1] == 'All'):
 
