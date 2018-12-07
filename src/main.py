@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import copy as cp
 import matplotlib.pyplot as plt
+import scikitplot as skplt	
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
@@ -132,7 +133,10 @@ if (sys.argv[1] == "b") or (sys.argv[1] == 'All'):
 
 	print (summer/float(len(pred)), ' If there is bad balane, this would be 0')
 
-	gain(X_test, Y_test, proba, pred)
+	skplt.metrics.plot_cumulative_gain(Y_test, proba)
+	plt.show()
+
+	# gain(X_test, Y_test, proba, pred)
 
 if (sys.argv[1] == "c") or (sys.argv[1] == 'All'):
 
