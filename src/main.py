@@ -13,6 +13,8 @@ from keras.layers.core import Dense, Dropout, Activation
 from keras.utils import np_utils, to_categorical
 from keras.optimizers import SGD
 
+import functions as fcn
+
 
 def XLSread(filename):
 	data = pd.read_excel(filename)
@@ -133,7 +135,8 @@ if (sys.argv[1] == "b") or (sys.argv[1] == 'All'):
 
 	print (summer/float(len(pred)), ' If there is bad balane, this would be 0')
 
-	skplt.metrics.plot_cumulative_gain(Y_test, proba)
+	#skplt.metrics.plot_cumulative_gain(Y_test, proba)
+	fcn.plot_cumulative_gain(Y_test, proba)
 	plt.show()
 
 	# gain(X_test, Y_test, proba, pred)
