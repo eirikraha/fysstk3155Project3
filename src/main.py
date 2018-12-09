@@ -102,6 +102,8 @@ for i in enumerate(ones_index):
 # print (X.shape, Y.shape)
 
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.3)
+X_train_rf = X_train
+X_test_rf = X_test
 scaler = StandardScaler()
 scaler.fit(X_train)
 
@@ -185,3 +187,19 @@ if (sys.argv[1] == "c") or (sys.argv[1] == 'All'):
 
 else:
 	print ('Write in task you wish to perform')
+    
+if (sys.argv[1] == "d") or (sys.argv[1] == 'All'):
+    
+    from sklearn.ensemble import RandomForestClassifier
+    
+    rnd_clf = RandomForestClassifier(n_estimators = 100, max_leaf_nodes = 10)
+    rnd_clf.fit(X_train_rf, Y_train)
+    
+    y_pred_rf = rnd_clf.predict(X_test_rf)
+    
+    test_acc = np.sum(Y_test == y_pred_rf, axis=0)/X_test_rf.shape[0]
+    print('Test accuracy: %.2f%%' % (test_acc * 100))
+    
+    
+    
+    
