@@ -192,7 +192,7 @@ if (sys.argv[1] == "d") or (sys.argv[1] == 'All'):
     
     from sklearn.ensemble import RandomForestClassifier
     
-    rnd_clf = RandomForestClassifier(n_estimators = 100, max_leaf_nodes = 10)
+    rnd_clf = RandomForestClassifier(n_estimators = 500, max_leaf_nodes = 20)
     rnd_clf.fit(X_train_rf, Y_train)
     
     y_pred_rf = rnd_clf.predict(X_test_rf)
@@ -200,6 +200,12 @@ if (sys.argv[1] == "d") or (sys.argv[1] == 'All'):
     test_acc = np.sum(Y_test == y_pred_rf, axis=0)/X_test_rf.shape[0]
     print('Test accuracy: %.2f%%' % (test_acc * 100))
     
-    
+    # Feature importance
+    # Make X_names array
+    X_names = ["X1", "X2", "X3", "X4", "X5", "X6", "X7", "X8", "X9", "X10",
+    		 "X11", "X12", "X13", "X14", "X15", "X16", "X17", "X18", "X19", "X20",
+    		  "X21", "X22", "X23"]
+    for name, score in zip(X_names, rnd_clf.feature_importances_):
+    	print(name, score)
     
     
