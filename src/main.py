@@ -6,12 +6,14 @@ import matplotlib.pyplot as plt
 import scikitplot as skplt	
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
 from sklearn import metrics
 from sklearn.preprocessing import StandardScaler
 from keras.models import Sequential
 from keras.layers.core import Dense, Dropout, Activation
 from keras.utils import np_utils, to_categorical
 from keras.optimizers import SGD
+from keras import regularizers
 
 import functions as fcn
 
@@ -87,20 +89,6 @@ Y_ones = np.ones(len(ones_index))
 for i in enumerate(ones_index):
 	X_ones[i[0]] = X[i[1]]
 
-#print (X_ones.shape, X.shape, X.shape[0] + X_ones.shape[0]*3, len(Y))
-
-# X = np.r_[X, X_ones, X_ones, X_ones] #, X_ones[:int(np.floor(X_ones.shape[0]*0.52))]]
-# Y = np.r_[Y, Y_ones, Y_ones, Y_ones] #, Y_ones[:int(np.floor(Y_ones.shape[0]*0.52))]]
-
-# Y_counter = 0
-# for i in enumerate(Y):
-# 	if i[1] == 1:
-# 		Y_counter += 1
-
-# print ('Ratio of ones to zeros:', Y_counter/float(len(Y)))
-
-# print (X.shape, Y.shape)
-
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.3)
 X_train_rf = X_train
 X_test_rf = X_test
@@ -128,71 +116,153 @@ if (sys.argv[1] == "b") or (sys.argv[1] == 'All'):
 	print (pred.shape, np.array(Y_test).shape)
 
 	print (LogReg.score(X_test, Y_test))
-	print (metrics.accuracy_score(Y_test, pred))	
+	print (metrics.accuracy_score(Y_test, pred))
 
-	summer = 0
-	for i in range(0, len(pred)):
-		if Y_test[i] == 1 and pred[i] == Y_test[i]:
-			summer += 1
+	train_acc = LogReg.score(X_train, Y_train)
+	print('Training accuracy: %.2f%%' % (train_acc * 100))
 
-	print (summer/float(len(pred)), ' If there is bad balane, this would be 0')
+	test_acc = LogReg.score(X_test, Y_test)
+	print('Test accuracy: %.2f%%' % (test_acc * 100))
+
 
 	#skplt.metrics.plot_cumulative_gain(Y_test, proba)
 	fcn.plot_cumulative_gain(Y_test, proba)
 	plt.show()
 
-	# gain(X_test, Y_test, proba, pred)
-
 if (sys.argv[1] == "c") or (sys.argv[1] == 'All'):
 
 	Y_train = to_categorical(Y_train)
 
+	net_type = "Standard"
 
-	print(X_train)
+	filename = '../benchmarks/mom_NN%s_data.txt' % (net_type)
 
-	model = Sequential()
-	model.add(Dense(64, input_shape = (X_train.shape[1], )))
-	model.add(Activation('relu'))
-	model.add(Dropout(0.2))
-	model.add(Dense(32))
-	model.add(Activation('relu'))
-	model.add(Dropout(0.2))
-	model.add(Dense(32))
-	model.add(Activation('relu'))
-	model.add(Dropout(0.2))
-	model.add(Dense(2))
-	model.add(Activation('softmax'))
+	f = open(filename, 'w')
+	f.write('### Start of neural net file ###')
+	f.close()
 
-	
 
-	sgd = SGD(lr=0.01, decay=1e-7, momentum=.9)
-	model.compile(loss='categorical_crossentropy', 
+	epochs_array = [i*20 for i in range(3, 10)]
+	nb = [2**i for i in range(6, 12)]
+	lr = [0.1, 0.01, 0.001, 0.0001]
+	decay = [1e-5, 1e-6, 1e-7, 1e-8, 1e-9]
+	momentum = [.7, .8, .9, 1.0, 1.1, 1.2]
+	lmbs = [1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1.0, 10, 100]
+
+
+
+	for lmb in lmbs:
+
+		if (len(sys.argv) > 2) and (sys.argv[2] == "Deep"):
+
+			net_type = "Deep"
+
+			model = Sequential()
+			model.add(Dense(60, input_shape = (X_train.shape[1], )), kernel_regularizer=regularizers.l2(lmb))
+			model.add(Activation('relu'))
+			model.add(Dropout(0.2))
+			model.add(Dense(40), kernel_regularizer=regularizers.l2(lmb))
+			model.add(Activation('relu'))
+			model.add(Dropout(0.2))
+			model.add(Dense(40), kernel_regularizer=regularizers.l2(lmb))
+			model.add(Activation('relu'))
+			model.add(Dropout(0.2))
+			model.add(Dense(40), kernel_regularizer=regularizers.l2(lmb))
+			model.add(Activation('relu'))
+			model.add(Dropout(0.2))
+			model.add(Dense(40), kernel_regularizer=regularizers.l2(lmb))
+			model.add(Activation('relu'))
+			model.add(Dropout(0.2))
+			model.add(Dense(40), kernel_regularizer=regularizers.l2(lmb))
+			model.add(Activation('relu'))
+			model.add(Dropout(0.2))
+			model.add(Dense(40), kernel_regularizer=regularizers.l2(lmb))
+			model.add(Activation('relu'))
+			model.add(Dropout(0.2))
+			model.add(Dense(40), kernel_regularizer=regularizers.l2(lmb))
+			model.add(Activation('relu'))
+			model.add(Dropout(0.2))
+			model.add(Dense(10), kernel_regularizer=regularizers.l2(lmb))
+			model.add(Activation('relu'))
+			model.add(Dropout(0.2))
+			model.add(Dense(2), kernel_regularizer=regularizers.l2(lmb))
+			model.add(Activation('softmax'))
+
+		elif (len(sys.argv) > 2) and (sys.argv[2] == "Wide"):
+
+			net_type = "Wide"
+
+			model = Sequential()
+			model.add(Dense(512, input_shape = (X_train.shape[1], )))
+			model.add(Activation('relu'))
+			model.add(Dropout(0.2))
+			model.add(Dense(512))
+			model.add(Activation('relu'))
+			model.add(Dropout(0.2))
+			model.add(Dense(2))
+			model.add(Activation('softmax'))
+
+		else:
+			model = Sequential()
+			model.add(Dense(64, input_shape = (X_train.shape[1], ), kernel_regularizer=regularizers.l2(lmb)))
+			model.add(Activation('relu'))
+			model.add(Dropout(0.2))
+			model.add(Dense(32, kernel_regularizer=regularizers.l2(lmb)))
+			model.add(Activation('relu'))
+			model.add(Dropout(0.2))
+			model.add(Dense(32, kernel_regularizer=regularizers.l2(lmb)))
+			model.add(Activation('relu'))
+			model.add(Dropout(0.2))
+			model.add(Dense(2, kernel_regularizer=regularizers.l2(lmb)))
+			model.add(Activation('softmax'))
+
+
+
+		sgd = SGD(lr=0.01, decay=1e-8, momentum=1e-8)
+		model.compile(loss='categorical_crossentropy', 
 	              optimizer=sgd, 
 	              metrics=['accuracy'])
 
-	model.fit(X_train, Y_train, 
-	          epochs=50, # Keras 2: former nb_epoch has been renamed to epochs
-	          batch_size=128, 
-	          verbose=1) 
+		model.fit(X_train, Y_train, 
+		          epochs=140, # Keras 2: former nb_epoch has been renamed to epochs
+		          batch_size=512, 
+		          verbose=1) 
 
-	Y_train_pred = model.predict_classes(X_train, verbose=0)
-	print('Average predictions: ', np.mean(Y_train_pred))
 
-	train_acc = np.sum(Y_train == Y_train_pred, axis=0) / X_train.shape[0]
-	print('Training accuracy: %.2f%%' % (train_acc * 100))
+		f = open(filename, 'a')
 
-	Y_test_pred = model.predict_classes(X_test, verbose=0)
-	test_acc = np.sum(Y_test == Y_test_pred, axis=0) / X_test.shape[0]
-	print('Test accuracy: %.2f%%' % (test_acc * 100))
+		print ('Type: %s' %net_type)
+		print ('Epochs: %d' %140)
+		print ('Batch size: %d' %512)
+		print ('Learning rate: %1.2e' %0.01)
+		print ('Decay: %1.2e' %1e-8)
+		print ('Momentum: %1.2f' %1e-8)
+		print ('Lambda: %1.2e' %lmb)
+		Y_train_pred = model.predict_classes(X_train, verbose=0)
+		print('Average predictions: ', np.mean(Y_train_pred))
 
-else:
-	print ('Write in task you wish to perform')
+		train_acc = np.sum(Y_train == Y_train_pred, axis=0) / X_train.shape[0]
+		print('Training accuracy: %.2f%%' % (train_acc * 100))
+
+		Y_test_pred = model.predict_classes(X_test, verbose=0)
+		test_acc = np.sum(Y_test == Y_test_pred, axis=0) / X_test.shape[0]
+		print('Test accuracy: %.2f%%' % (test_acc * 100))
+
+		f.write('Epochs: %d \n' %140)
+		f.write('Batch size: %d \n' %512)
+		f.write('Learning rate: %1.2e \n' %0.01)
+		f.write('Decay: %1.2e \n' %1e-8)
+		f.write('Momentum: %1.2f \n' %1e-8)
+		f.write('Lambda: %1.2e' %lmb)
+		f.write('Average predictions: %.2f%%  \n' % np.mean(Y_train_pred))
+		f.write('Training accuracy: %.2f%%  \n' % (train_acc * 100))
+		f.write('Test accuracy: %.2f%%  \n' % (test_acc * 100))
+
+		f.close()
     
 if (sys.argv[1] == "d") or (sys.argv[1] == 'All'):
     
-    from sklearn.ensemble import RandomForestClassifier
-    
-    rnd_clf = RandomForestClassifier(n_estimators = 500, max_leaf_nodes = 20)
+    rnd_clf = RandomForestClassifier(n_estimators = 500, max_leaf_nodes = 50)
     rnd_clf.fit(X_train_rf, Y_train)
     
     y_pred_rf = rnd_clf.predict(X_test_rf)
@@ -205,7 +275,12 @@ if (sys.argv[1] == "d") or (sys.argv[1] == 'All'):
     X_names = ["X1", "X2", "X3", "X4", "X5", "X6", "X7", "X8", "X9", "X10",
     		 "X11", "X12", "X13", "X14", "X15", "X16", "X17", "X18", "X19", "X20",
     		  "X21", "X22", "X23"]
+    
+    score_sum = 0
     for name, score in zip(X_names, rnd_clf.feature_importances_):
+    	score_sum += score
     	print(name, score)
+    print (score_sum)
     
-    
+else:
+	print ('Write in task you wish to perform')
