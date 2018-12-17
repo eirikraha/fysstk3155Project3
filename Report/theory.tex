@@ -97,8 +97,56 @@ In addition to sampling training instances, the random forest algorithm samples 
 In our project we will use the \textit{RandomForestClassifier} class from Scitkit-Learn. When using \textit{RandomForestClassifier}, we can adjust all the hyperparameters described in the Decision Tree section, as well as hyperparameters controlling the sampling.\\
 A great quality of random forest is that they make it easy to measure the relative importance of each feature. "Scikit-Learn measures importance by looking at how much the tree nodes that use the feature reduce impurity on average (across all trees in the forest). More precisely, it is a weighted average, where each node's weight is equal to the number of training samples that are associated with it." \husk{[Géron, p.192]} 
 
-
+\section{Experimental}
+The script used in all calculations presented in this paper can be found at the github repository \cite{github}. In the \texttt{src} folder one will find the file \texttt{main.py}. By running this file and a set of inputs, one can run different instances of the script. An overview of the different input arguments is presented in table \ref{tabE:sysargv}:
+\begin{table}[H]
+\centering
+\begin{tabular}{c|p{10cm}}
+Argument & Effect \\ \hline
+b & Runs the logistic regression classifier \\ \hline
+c & Runs the neural network classifier with the standard network \\ \hline
+c Deep & Runs a neural network classifier which is made extra deep (many layers with few neurons) \\ \hline
+c Wide & Runs a neural network classifier which is made extra wide (few layers with many neurons) \\ \hline
+d & Runs a random forrest classifier
+\end{tabular}
+\caption{The different input arguments and their effect when running \texttt{src/main.py}}
+\label{tabE:sysargv}
+\end{table}
+Other features such as grid searching to find the optimal variables were changed directly in the script. This is not the ideal way to do it, but was chosen to save time.
+Before any data is processed it is read from a \texttt{.csv}-file which can be found at \husk{Link!}
+\section{Results}
+\subsection{Logistic Regression}
+Running a logistic regression on the data with parameters \husk{parameters} provided the data provided in the gain plot presented in figure \ref{figR:logreg}. \\
+\subsection{Neural Network}
+To find the optimal settings for our neural network many parameters were tweaked before we found the best one. All tables with information about each test can be found in appendix A \husk{Ref!} and the optimal parameters are presented in table \ref{tabR:NNopti}:
+\begin{table}[H]
+\centering
+\begin{tabular}{c|c}
+Parameter & Setting \\ \hline
+Type & Standard \\ \hline
+Regularisation & L2 \\ \hline
+Activation function & relu \\ \hline
+Epochs & 140 \\ \hline
+Mini batch size & 512 \\ \hline
+Learning rate & 0.01 \\ \hline
+Decay & 1 $\cdot 10^{-8}$ \\ \hline
+Momentum & 1 $\cdot 10^{-8}$
+\end{tabular}
+\end{table}
+Using these settings we found the gain-plot presented in figure \ref{figR:NN}. \husk{Gain NN!}
+\subsection{Random Forrest}
+Similarily, we found the optimal parameters for a random forrest (table \ref{tabR:randomforrest}) and produced the gain plot presented in figure \ref{figR:randomforrest}.
 \section{Discussion}
+As we can see from the results above, the optimal model for these datas are hard to find and we have not performed any better than the article of \husk{Ref til artikkelforfattere}. There are several reasons behind this. First of all, the data set is small and not well balanced. There are several ways to compensate for this imbalance such as upsampling or downsampling the under represented data class or the over represented class respectively. An attempt was made at upsampling the under represented class by copying the exsisting data for this class, however, this caused a lower accuracy than the standard data set. \\ 
+Due to the imbalance of the data set, most classifiers tends to opt for setting all models to guessing the overrepresented class which gives an accuracy of about 77\%. This was initially a challange and effects the whole process even though our current attempts have raised the accuracy to at best 82\%.\\ \\
+Furthermore, one could have tuned the models better or set them up differently. This is something that is learned by experience and due to lack of time we were unable to find better parametres than the ones presented in the results. For future works we would like to tune the models even better and enlist the help of more experienced people to help spot the weaknesses of our code. \\ \\
+
+\begin{itemize}
+\item To little data
+\item Could have created more, but this gave no effect
+\item Even with optimal parameters, we perform slightly better than choosing 0 for all.
+\item Optimal parameters and similar stuff could be done better and more efficient.
+\end{itemize}
 Interpretability of models. White box vesus black box (Géron p. 172).
 
 \end{document}
