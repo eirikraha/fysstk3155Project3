@@ -1,0 +1,13 @@
+### Start of neural net file ### 
+
+Epochs: 140 
+Batch size: 512 
+Learning rate: 1.00e-02 
+Decay: 1.00e-08 
+Momentum: 0.70 
+Lambda: 1.00e-05
+Average predictions: 0.10%  
+Training accuracy: 82.19%  
+Test accuracy: 81.36%  
+
+

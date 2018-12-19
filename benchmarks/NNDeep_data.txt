@@ -1,0 +1,28 @@
+### Start of neural net file ###Epochs: 60 
+Average predictions: 0.01%  
+Training accuracy: 0.00%  
+Test accuracy: 78.69%  
+Epochs: 80 
+Average predictions: 0.01%  
+Training accuracy: 0.00%  
+Test accuracy: 78.33%  
+Epochs: 100 
+Average predictions: 0.03%  
+Training accuracy: 0.00%  
+Test accuracy: 79.44%  
+Epochs: 120 
+Average predictions: 0.05%  
+Training accuracy: 0.00%  
+Test accuracy: 80.73%  
+Epochs: 140 
+Average predictions: 0.07%  
+Training accuracy: 0.00%  
+Test accuracy: 81.39%  
+Epochs: 160 
+Average predictions: 0.07%  
+Training accuracy: 0.00%  
+Test accuracy: 81.30%  
+Epochs: 180 
+Average predictions: 0.07%  
+Training accuracy: 0.00%  
+Test accuracy: 81.27%  

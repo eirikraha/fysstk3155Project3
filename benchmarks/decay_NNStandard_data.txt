@@ -1,0 +1,25 @@
+### Start of neural net file ###Epochs: 140 
+Batch size: 512 
+Learning rate: 1.00e-02Decay: 1.00e-05Average predictions: 0.09%  
+Training accuracy: 0.00%  
+Test accuracy: 81.54%  
+Epochs: 140 
+Batch size: 512 
+Learning rate: 1.00e-02Decay: 1.00e-06Average predictions: 0.11%  
+Training accuracy: 0.00%  
+Test accuracy: 81.83%  
+Epochs: 140 
+Batch size: 512 
+Learning rate: 1.00e-02Decay: 1.00e-07Average predictions: 0.11%  
+Training accuracy: 0.00%  
+Test accuracy: 81.84%  
+Epochs: 140 
+Batch size: 512 
+Learning rate: 1.00e-02Decay: 1.00e-08Average predictions: 0.11%  
+Training accuracy: 0.00%  
+Test accuracy: 81.93%  
+Epochs: 140 
+Batch size: 512 
+Learning rate: 1.00e-02Decay: 1.00e-09Average predictions: 0.11%  
+Training accuracy: 0.00%  
+Test accuracy: 81.89%  
