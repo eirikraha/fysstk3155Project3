@@ -1,0 +1,25 @@
+\begin{thebibliography}{1}
+
+\bibitem{UCI}
+UCI.
+\newblock default of credit card clients data set.
+
+\bibitem{yeh}
+I-Cheng Yeh and Che hui Lien.
+\newblock The comparisons of data mining techniques for the predictive accuracy
+  of probability of default of credit card clients.
+\newblock {\em Expert Systems with Applications}, 36(2, Part 1):2473 -- 2480,
+  2009.
+
+\bibitem{project2}
+Mathias Vege.
+\newblock Fysstk4155: Project 2 github repository.
+\newblock https://github.com/hmvege/FYSSTK4155-Project2, October 2018.
+
+\bibitem{Geron}
+Aur{\'e}lien G{\'e}ron.
+\newblock {\em Hands-on machine learning with Scikit-Learn and TensorFlow:
+  concepts, tools, and techniques to build intelligent systems}.
+\newblock " O'Reilly Media, Inc.", 2017.
+
+\end{thebibliography}
